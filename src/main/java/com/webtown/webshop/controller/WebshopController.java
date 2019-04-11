@@ -30,7 +30,7 @@ public class WebshopController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         List<Product> products = createProducts(csvToList(csvProducts));
-        out.println(HTML_START + "<form action=\"shopping-form\" method=\"POST\">");
+        out.println(HTML_START + "<form action=\"webtownwebshop\" method=\"POST\">");
         out.println("   <table>");
         out.println("       <thead>");
         out.println("           <th>Termék</th>");
@@ -58,6 +58,19 @@ public class WebshopController extends HttpServlet {
         out.println("</form>"  + HTML_END);
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        Collection values = request.getParameterMap().values();
+        List<String> productAmounts = new ArrayList<>(values);
+
+    }
+
+    private List<Integer> calculatePrice(List<Product> products, List<Integer> amounts) {
+        List<Integer> prices = new ArrayList<>();
+        for (int i = 0; i < products.size(); i++) {
+
+        }
+    }
 
     private List<List<String>> csvToList(String csvFile) throws IOException{
         List<List<String>> records = new ArrayList<>();
@@ -84,4 +97,6 @@ public class WebshopController extends HttpServlet {
         }
         return products;
     }
+
+
 }

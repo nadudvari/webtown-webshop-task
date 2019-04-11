@@ -65,12 +65,12 @@ public class WebshopController extends HttpServlet {
 
     }
 
-    private List<Integer> calculatePrice(List<Product> products, List<Integer> amounts) {
-        List<Integer> prices = new ArrayList<>();
-        for (int i = 0; i < products.size(); i++) {
-
-        }
-    }
+//    private List<Integer> calculatePrice(List<Product> products, List<Integer> amounts) {
+//        List<Integer> prices = new ArrayList<>();
+//        for (int i = 0; i < products.size(); i++) {
+//
+//        }
+//    }
 
     private List<List<String>> csvToList(String csvFile) throws IOException{
         List<List<String>> records = new ArrayList<>();

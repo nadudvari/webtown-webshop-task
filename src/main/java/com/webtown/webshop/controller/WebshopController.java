@@ -1,6 +1,7 @@
 package com.webtown.webshop.controller;
 
 import com.opencsv.CSVReader;
+import com.webtown.webshop.model.Product;
 
 import java.io.*;
 import java.util.*;
@@ -19,12 +20,44 @@ public class WebshopController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String HTML_START="<html><body>";
     private static final String HTML_END="</body></html>";
-    private static final String products = "/home/nadudvari/Webtown/src/main/java/com/webtown/webshop/config/Termékek.csv";
+    private static final String csvProducts = "/home/nadudvari/Webtown/src/main/java/com/webtown/webshop/config/Termékek.csv";
 
 
     public WebshopController() {
         super();
     }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        List<Product> products = createProducts(csvToList(csvProducts));
+        out.println(HTML_START + "<form action=\"shopping-form\" method=\"POST\">");
+        out.println("   <table>");
+        out.println("       <thead>");
+        out.println("           <th>Termék</th>");
+        out.println("           <th>Ár</th>");
+        out.println("           <th>Akció</th>");
+        out.println("       </thead>");
+        out.println("       <tbody>");
+        for (Product product : products) {
+            out.println("       <tr>");
+            out.println("           <td>" + product.getName() + "</td>");
+            out.println("           <td>" + product.getPrice() + "Ft</td>");
+            if (product.getTwoEqualsThree() != null && product.getTwoEqualsThree().equals("X")) {
+                out.println("           <td>2 = 3</td>");
+            }
+            if (product.getMegaPack() != null && product.getMegaPack().equals("X")) {
+                out.println("           <td>Megapack</td>");
+
+            }
+            out.println("           <td><input type=\"text\" name=\"" + product.getId() + "\" value=\"\"></td>");
+            out.println("       </tr>");
+        }
+        out.println("       </tbody>");
+        out.println("   </table>");
+        out.println("<input type=\"submit\" value=\"Submit\">");
+        out.println("</form>"  + HTML_END);
+    }
+
 
     private List<List<String>> csvToList(String csvFile) throws IOException{
         List<List<String>> records = new ArrayList<>();
@@ -37,42 +70,18 @@ public class WebshopController extends HttpServlet {
         return records;
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        List<List<String>> records = csvToList(products);
-        out.println(HTML_START + "<form action=\"shopping-form\" method=\"POST\">");
-        out.println("   <table>");
-        out.println("       <thead>");
-        out.println("           <th>Termék</th>");
-        out.println("           <th>Ár</th>");
-        out.println("           <th>Akció</th>");
-        out.println("       </thead>");
-        out.println("       <tbody>");
-        for (int i = 1; i < records.size(); i++) {
-            out.println("       <tr>");
-            out.println("           <td>" + records.get(i).get(0) + "</td>");
-            out.println("           <td>" + records.get(i).get(1) + "Ft</td>");
-            if (records.get(i).get(2).equals("X")) {
-                out.println("           <td>2 = 3</td>");
+    private List<Product> createProducts(List<List<String>> productStrings) {
+        List<Product> products = new ArrayList<>();
+        int id = 0;
+        for (List list : productStrings) {
+            Product product = new Product(id++, (String) list.get(0), (String) list.get(1));
+            if (list.get(2).equals("X")) {
+                product.setTwoEqualsThree("X");
+            } else if (list.get(3).equals("X")) {
+                product.setMegaPack("X");
             }
-            if (records.get(i).get(3).equals("X")) {
-                out.println("           <td>Megapack</td>");
-
-            }
-            out.println("           <td><input type=\"text\" name=\"product" + i + "\" value=\"\"></td>");
-            out.println("       </tr>");
+            products.add(product);
         }
-        out.println("       </tbody>");
-        out.println("   </table>");
-        out.println("<input type=\"submit\" value=\"Submit\">");
-        out.println("</form>"  + HTML_END);
-//        response.setContentType("text/html");
-//
-//        try {
-//            request.getRequestDispatcher("../../webapp/webshop.jsp").include(request, response);
-//        } catch (ServletException e) {
-//            e.printStackTrace();
-//        }
+        return products;
     }
-
 }

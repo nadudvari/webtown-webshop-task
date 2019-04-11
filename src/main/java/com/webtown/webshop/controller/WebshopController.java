@@ -19,7 +19,7 @@ public class WebshopController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String HTML_START="<html><body>";
     private static final String HTML_END="</body></html>";
-    private static final String products = "/home/nadudvari/Webtown/src/main/java/com/webtown/webshop/config/Termékek.csv"
+    private static final String products = "/home/nadudvari/Webtown/src/main/java/com/webtown/webshop/config/Termékek.csv";
 
 
     public WebshopController() {
@@ -40,12 +40,32 @@ public class WebshopController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         List<List<String>> records = csvToList(products);
-        Date date = new Date();
-        out.println(HTML_START + "<h2>Hi There!</h2><br/><h3>Date: "+ date +"</h3>");
-        for (List<String> record : records) {
-            out.println("<p>" + record + "</p>");
+        out.println(HTML_START + "<form action=\"shopping-form\" method=\"POST\">");
+        out.println("   <table>");
+        out.println("       <thead>");
+        out.println("           <th>Termék</th>");
+        out.println("           <th>Ár</th>");
+        out.println("           <th>Akció</th>");
+        out.println("       </thead>");
+        out.println("       <tbody>");
+        for (int i = 1; i < records.size(); i++) {
+            out.println("       <tr>");
+            out.println("           <td>" + records.get(i).get(0) + "</td>");
+            out.println("           <td>" + records.get(i).get(1) + "Ft</td>");
+            if (records.get(i).get(2).equals("X")) {
+                out.println("           <td>2 = 3</td>");
+            }
+            if (records.get(i).get(3).equals("X")) {
+                out.println("           <td>Megapack</td>");
+
+            }
+            out.println("           <td><input type=\"text\" name=\"product" + i + "\" value=\"\"></td>");
+            out.println("       </tr>");
         }
-        out.println(HTML_END);
+        out.println("       </tbody>");
+        out.println("   </table>");
+        out.println("<input type=\"submit\" value=\"Submit\">");
+        out.println("</form>"  + HTML_END);
 //        response.setContentType("text/html");
 //
 //        try {
@@ -53,10 +73,6 @@ public class WebshopController extends HttpServlet {
 //        } catch (ServletException e) {
 //            e.printStackTrace();
 //        }
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 
 }

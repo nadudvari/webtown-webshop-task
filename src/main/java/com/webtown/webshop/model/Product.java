@@ -4,14 +4,16 @@ public class Product {
 
     private int id;
     private String name;
-    private String price;
+    private int price;
     private String twoEqualsThree;
     private String megaPack;
+    private int amount;
+    private int totalPrice;
 
     public Product() {
     }
 
-    public Product(int id, String name, String price) {
+    public Product(int id, String name, int price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -33,11 +35,11 @@ public class Product {
         this.name = name;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -55,6 +57,22 @@ public class Product {
 
     public void setMegaPack(String megaPack) {
         this.megaPack = megaPack;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     @Override
